@@ -3,6 +3,7 @@ export type ApiErrorCode =
   | "TIMEOUT"
   | "BAD_REQUEST"
   | "UNAUTHORIZED"
+  | "FORBIDDEN"
   | "NOT_FOUND"
   | "RATE_LIMITED"
   | "SERVER"
@@ -14,7 +15,8 @@ const USER_MESSAGES: Record<ApiErrorCode, string> = {
   NETWORK: "We couldn't reach the store. Check your connection and try again.",
   TIMEOUT: "The store is taking too long to respond. Please try again in a moment.",
   BAD_REQUEST: "Something about that request wasn't right. Please check and try again.",
-  UNAUTHORIZED: "Your credentials didn't match. Please check them and try again.",
+  UNAUTHORIZED: "You need to be signed in to do that.",
+  FORBIDDEN: "The store's data provider refused the request. Please try again shortly.",
   NOT_FOUND: "We couldn't find what you were looking for.",
   RATE_LIMITED: "You're going a little fast. Please wait a moment and try again.",
   SERVER: "The store is having trouble right now. Please try again shortly.",
@@ -59,11 +61,20 @@ export class ApiError extends Error {
   get isRetryable(): boolean {
     return ["NETWORK", "TIMEOUT", "SERVER", "RATE_LIMITED"].includes(this.code);
   }
+
+  /**
+   * The upstream service could not be used at all (unreachable, failing, or blocking us,
+   * e.g. a bot-protection 403 on serverless hosts) — as opposed to rejecting the request itself.
+   */
+  get isUnavailable(): boolean {
+    return ["NETWORK", "TIMEOUT", "SERVER", "RATE_LIMITED", "FORBIDDEN", "PARSE"].includes(this.code);
+  }
 }
 
 export function codeFromStatus(status: number): ApiErrorCode {
   if (status === 400 || status === 422) return "BAD_REQUEST";
-  if (status === 401 || status === 403) return "UNAUTHORIZED";
+  if (status === 401) return "UNAUTHORIZED";
+  if (status === 403) return "FORBIDDEN";
   if (status === 404) return "NOT_FOUND";
   if (status === 429) return "RATE_LIMITED";
   if (status >= 500) return "SERVER";
