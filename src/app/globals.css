@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/*
+ * Kosha design tokens.
+ * Pine (trust, primary actions) · Persimmon (energy, commerce CTAs) · Citron (highlights)
+ * on a warm parchment canvas — high contrast for text, warm enough to feel crafted.
+ */
+@theme {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-manrope), ui-sans-serif, sans-serif;
+
+  --color-canvas: #f5f0e6;
+  --color-surface: #fffcf6;
+  --color-sunken: #ede5d6;
+  --color-line: #e2d8c6;
+  --color-line-strong: #cfc2ab;
+
+  --color-ink: #13201d;
+  --color-ink-soft: #46544f;
+  --color-ink-faint: #7a8580;
+
+  --color-pine-50: #eef5f1;
+  --color-pine-100: #dbe9e2;
+  --color-pine-200: #b5d2c4;
+  --color-pine-300: #84b29f;
+  --color-pine-500: #2f7a69;
+  --color-pine-600: #22665a;
+  --color-pine-700: #1b4d44;
+  --color-pine-800: #143a33;
+  --color-pine-900: #0d2823;
+
+  --color-persimmon-50: #fff1eb;
+  --color-persimmon-100: #fde0d4;
+  --color-persimmon-400: #f47b58;
+  --color-persimmon-500: #ee5a36;
+  --color-persimmon-600: #d6421e;
+  --color-persimmon-700: #b13416;
+
+  --color-citron-100: #f6f9d2;
+  --color-citron-200: #edf3a3;
+  --color-citron-300: #dfeb63;
+  --color-citron-400: #cddd34;
+
+  --color-star: #f0a43a;
+  --color-danger: #c0392b;
+
+  --radius-card: 1.25rem;
+  --shadow-soft: 0 1px 2px rgb(19 32 29 / 0.04), 0 8px 24px -12px rgb(19 32 29 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(19 32 29 / 0.05), 0 22px 44px -18px rgb(19 32 29 / 0.28);
+  --shadow-drawer: -24px 0 60px -20px rgb(13 40 35 / 0.35);
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  ::selection {
+    background-color: var(--color-citron-300);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-persimmon-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .skeleton {
+    background: linear-gradient(90deg, var(--color-sunken) 0%, #f7f1e6 50%, var(--color-sunken) 100%);
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+  }
+
+  /* Dual-thumb range slider built from two native inputs layered on one track. */
+  .range-thumb {
+    pointer-events: none;
+    appearance: none;
+    background: transparent;
+  }
+  .range-thumb::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    height: 22px;
+    width: 22px;
+    border-radius: 9999px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-pine-700);
+    box-shadow: 0 2px 6px rgb(13 40 35 / 0.25);
+    cursor: grab;
+    transition: transform 0.15s ease;
+  }
+  .range-thumb::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.12); }
+  .range-thumb::-moz-range-thumb {
+    pointer-events: auto;
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-pine-700);
+    box-shadow: 0 2px 6px rgb(13 40 35 / 0.25);
+    cursor: grab;
+  }
+  .range-thumb:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-persimmon-500);
+    outline-offset: 2px;
+  }
+
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+}
