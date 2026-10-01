@@ -42,6 +42,19 @@
   --color-citron-400: #cddd34;
 
   --color-star: #f0a43a;
+
+  /* Task 2 (Figma) colour tokens. */
+  --color-t2-blue: #1253ed;
+  --color-t2-ink: #171717;
+  --color-t2-text: #262626;
+  --color-t2-muted: #414141;
+  --color-t2-heading: #2b2b2b;
+  --color-t2-mint: #1da077;
+  --color-t2-crimson: #c33241;
+  --color-t2-blush: #f9ebec;
+  --color-t2-chip: #d9d9d9;
+  --color-t2-track: #ededed;
+  --color-t2-thumb: #cfcfcf;
   --color-danger: #c0392b;
 
   --radius-card: 1.25rem;
@@ -71,6 +84,17 @@
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
+}
+
+/*
+ * Task 2 font slots. `inline` makes utilities reference the next/font variables directly,
+ * since those are only defined on the /task2 wrapper, not on :root.
+ */
+@theme inline {
+  --font-oakes: var(--font-oakes-standin), var(--font-manrope), sans-serif;
+  --font-nohemi: var(--font-nohemi-standin), sans-serif;
+  --font-outfit: var(--font-outfit-family), sans-serif;
+  --font-ui: var(--font-manrope), sans-serif;
 }
 
 @layer base {
